@@ -85,6 +85,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    // Entfernungsmesser: Kamerabild als Zielhilfe
+    implementation("androidx.camera:camera-core:1.4.1")
+    implementation("androidx.camera:camera-camera2:1.4.1")
+    implementation("androidx.camera:camera-lifecycle:1.4.1")
+    implementation("androidx.camera:camera-view:1.4.1")
 
     // Alles Weitere kommt erst dazu, wenn die App es tatsächlich braucht -
     // nichts davon ist Teil des Grundgerüsts. Beispiele, je nach Bedarf

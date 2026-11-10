@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">littleTools</string>
+    <string name="back">Zurück</string>
+    <string name="close">Schließen</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="copy">Kopieren</string>
+    <string name="grant_permission">Berechtigung erteilen</string>
+    <string name="sensor_missing">Dieses Gerät hat den nötigen Sensor nicht.</string>
+    <string name="waiting_for_sensor">Warte auf Sensorwerte …</string>
+
+    <string name="theme_title">Darstellung</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+
+    <string name="tool_compass">Kompass</string>
+    <string name="tool_edge_level">Wasserwaage</string>
+    <string name="tool_flat_level">Libelle</string>
+    <string name="tool_ruler">Zentimetermaß</string>
+    <string name="tool_flashlight">Taschenlampe</string>
+    <string name="tool_rangefinder">Entfernungsmesser</string>
+    <string name="tool_position">Position &amp; Höhe</string>
+
+    <string-array name="cardinal_directions">
+        <item>N</item><item>NO</item><item>O</item><item>SO</item>
+        <item>S</item><item>SW</item><item>W</item><item>NW</item>
+    </string-array>
+    <string name="compass_hint">Gerät flach halten. Magnetisch Nord; fern von Metall und Magneten.</string>
+    <string name="compass_calibrate_hint">Ungenau: Gerät mehrmals in Form einer Acht bewegen.</string>
+
+    <string name="level_calibrate">Nullpunkt hier setzen</string>
+    <string name="edge_level_hint">Gerät auf eine lange Kante stellen</string>
+
+    <string name="ruler_unit">cm</string>
+    <string name="ruler_calibrate">Lineal abgleichen</string>
+    <string name="ruler_calibrate_hint">Bankkarte mit der langen Seite an Strich 0 anlegen und den Regler verschieben, bis die farbige Linie an der Kartenkante liegt.</string>
+
+    <string name="flashlight_on">Licht einschalten</string>
+    <string name="flashlight_off">Licht ausschalten</string>
+    <string name="flashlight_no_flash">Kein Kamerablitz verfügbar – der Bildschirm leuchtet stattdessen.</string>
+
+    <string name="rangefinder_height">Haltehöhe: %1$s m</string>
+    <string name="rangefinder_too_flat">zu flach</string>
+    <string name="rangefinder_below_horizon">unter dem Horizont</string>
+    <string name="rangefinder_hint">Gerät in Haltehöhe (Kamera über dem Boden) halten und das Fadenkreuz auf den Fußpunkt des Objekts richten. Nur auf ebenem Boden; je weiter weg, desto ungenauer.</string>
+    <string name="camera_rationale">Für das Kamerabild als Zielhilfe ist die Kamera-Berechtigung nötig. Messen geht auch ohne.</string>
+    <string name="camera_denied">Kamera nicht erlaubt – Messung ohne Bild. In den App-Einstellungen änderbar.</string>
+
+    <string name="location_rationale">Für die Positionsanzeige braucht die App Zugriff auf den Standort. Er wird nur angezeigt, nicht gespeichert oder gesendet.</string>
+    <string name="location_denied">Standort nicht erlaubt. Bitte erlauben – sonst kann keine Position angezeigt werden.</string>
+    <string name="position_coordinates">Koordinaten</string>
+    <string name="position_searching">Suche Position …</string>
+    <string name="position_accuracy">Genauigkeit ± %1$s m</string>
+    <string name="position_source">Quelle: %1$s</string>
+    <string name="altitude_gps">Höhe (GPS)</string>
+    <string name="altitude_msl">%1$s m ü. NN</string>
+    <string name="altitude_ellipsoid">%1$s m (Ellipsoid)</string>
+    <string name="altitude_ellipsoid_hint">Höhe über dem WGS84-Ellipsoid, nicht über dem Meeresspiegel – in Deutschland etwa 40–50 m mehr als ü. NN.</string>
+    <string name="altitude_baro">Höhe (Luftdruck)</string>
+    <string name="barometer_missing">Kein Luftdrucksensor in diesem Gerät.</string>
+    <string name="barometer_values">Druck %1$s hPa, Bezug %2$s hPa</string>
+    <string name="barometer_hint">Wetterabhängig. Gut für Höhenunterschiede; für die absolute Höhe mit der GPS-Höhe abgleichen.</string>
+    <string name="barometer_from_gps">Mit GPS-Höhe abgleichen</string>
 </resources>

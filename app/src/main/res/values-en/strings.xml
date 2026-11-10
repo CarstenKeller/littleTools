@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">littleTools</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="reset">Reset</string>
+    <string name="copy">Copy</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="sensor_missing">This device lacks the required sensor.</string>
+    <string name="waiting_for_sensor">Waiting for sensor values …</string>
+
+    <string name="theme_title">Appearance</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <string name="tool_compass">Compass</string>
+    <string name="tool_edge_level">Spirit level</string>
+    <string name="tool_flat_level">Bubble level</string>
+    <string name="tool_ruler">Ruler</string>
+    <string name="tool_flashlight">Flashlight</string>
+    <string name="tool_rangefinder">Rangefinder</string>
+    <string name="tool_position">Position &amp; altitude</string>
+
+    <string-array name="cardinal_directions">
+        <item>N</item><item>NE</item><item>E</item><item>SE</item>
+        <item>S</item><item>SW</item><item>W</item><item>NW</item>
+    </string-array>
+    <string name="compass_hint">Hold the device flat. Magnetic north; keep away from metal and magnets.</string>
+    <string name="compass_calibrate_hint">Inaccurate: move the device in a figure eight a few times.</string>
+
+    <string name="level_calibrate">Set zero here</string>
+    <string name="edge_level_hint">Stand the device on a long edge</string>
+
+    <string name="ruler_unit">cm</string>
+    <string name="ruler_calibrate">Calibrate ruler</string>
+    <string name="ruler_calibrate_hint">Place a bank card with its long side at mark 0 and move the slider until the coloured line meets the card edge.</string>
+
+    <string name="flashlight_on">Turn light on</string>
+    <string name="flashlight_off">Turn light off</string>
+    <string name="flashlight_no_flash">No camera flash available – the screen lights up instead.</string>
+
+    <string name="rangefinder_height">Holding height: %1$s m</string>
+    <string name="rangefinder_too_flat">too flat</string>
+    <string name="rangefinder_below_horizon">below horizon</string>
+    <string name="rangefinder_hint">Hold the device at the set height (camera above ground) and aim the crosshair at the base of the object. Level ground only; less accurate the farther away.</string>
+    <string name="camera_rationale">The camera permission is needed for the camera image as an aiming aid. Measuring works without it.</string>
+    <string name="camera_denied">Camera not allowed – measuring without image. Can be changed in the app settings.</string>
+
+    <string name="location_rationale">To show your position the app needs location access. It is only displayed, never stored or sent.</string>
+    <string name="location_denied">Location not allowed. Please allow it – otherwise no position can be shown.</string>
+    <string name="position_coordinates">Coordinates</string>
+    <string name="position_searching">Searching position …</string>
+    <string name="position_accuracy">Accuracy ± %1$s m</string>
+    <string name="position_source">Source: %1$s</string>
+    <string name="altitude_gps">Altitude (GPS)</string>
+    <string name="altitude_msl">%1$s m above sea level</string>
+    <string name="altitude_ellipsoid">%1$s m (ellipsoid)</string>
+    <string name="altitude_ellipsoid_hint">Height above the WGS84 ellipsoid, not above sea level – can differ by tens of metres.</string>
+    <string name="altitude_baro">Altitude (air pressure)</string>
+    <string name="barometer_missing">This device has no pressure sensor.</string>
+    <string name="barometer_values">Pressure %1$s hPa, reference %2$s hPa</string>
+    <string name="barometer_hint">Weather dependent. Good for height differences; align with GPS altitude for absolute height.</string>
+    <string name="barometer_from_gps">Align with GPS altitude</string>
 </resources>
