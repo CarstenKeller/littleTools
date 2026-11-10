@@ -41,15 +41,15 @@ Positionsangabe mit Höhenmesser."
 - CameraX-Vorschau in Compose (AndroidView + PreviewView) – nur Gerätetest zeigt, ob sie läuft.
 
 ## Phase 1 – MVP
-- [ ] Grundgerüst + CI (Kickstart), Design-Skill
-- [ ] Startraster (A-01), Darstellung Hell/Dunkel/System (D-07), DE/EN (D-06)
-- [ ] Taschenlampe
-- [ ] Zentimetermaß
-- [ ] Wasserwaage Kante
-- [ ] Libelle Fläche
-- [ ] Kompass
-- [ ] Position + Höhenmesser
-- [ ] Entfernungsmesser (Neigung, mit Kamerabild)
+- [x] Grundgerüst + CI (Kickstart), Design-Skill
+- [x] Startraster (A-01), Darstellung Hell/Dunkel/System (D-07), DE/EN (D-06)
+- [x] Taschenlampe
+- [x] Zentimetermaß
+- [x] Wasserwaage Kante
+- [x] Libelle Fläche
+- [x] Kompass
+- [x] Position + Höhenmesser
+- [x] Entfernungsmesser (Neigung, mit Kamerabild)
 
 ## Phase 2 – Ideen
 - [ ] Kompass: geografisch Nord (Missweisung über `GeomagneticField`), Hochkant-Modus
@@ -58,4 +58,7 @@ Positionsangabe mit Höhenmesser."
 - [ ] Entfernungsmesser: Objekthöhe
 
 ## Fortschritt
-(laufend: was ist auf dem Gerät bestätigt, was nur CI-kompiliert, welche CI-Fixes waren nötig)
+- 2026-11-10: Grundgerüst grün (build-fb92a3f). MVP mit allen 7 Tools grün im ersten Anlauf
+  (build-505d43d, Unit-Tests ToolMath ausgeführt, lintVital ok, APK 2,9 MB).
+  **Alles nur CI-kompiliert, nichts auf dem Gerät geprüft** – Sensorrichtungen (Vorzeichen
+  Blase/Kompass), Lineal-Maßstab, Kamera-Vorschau, Torch, Standort sind offen.
