@@ -1,0 +1,76 @@
+name: Build debug APK
+
+on:
+  push:
+    branches:
+      # Bewusst jeder Branch: Claude-Sitzungen arbeiten auf Branches wie
+      # 'ccr-...' oder 'claude/...'. Ein engerer Filter (z. B. nur main)
+      # baut solche Branches lautlos NIE (kein Fehler, einfach kein Lauf).
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      # Bewusst KEINE separate "Set up Android SDK"-Action: der
+      # ubuntu-latest-Runner bringt bereits ein vollständiges SDK mit
+      # (ANDROID_HOME vorkonfiguriert, Plattformen/Build-Tools/Lizenzen
+      # vorhanden). Eine solche Action hat in der Praxis die Pipeline
+      # sogar kaputt gemacht, weil sie ein von Google entferntes
+      # Legacy-Paket installieren wollte. Details: references/ci-pipeline.md
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Compute short commit hash
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
+
+      # Unit-Tests (JVM) vor dem Build: einzige automatische Prüfung der Logik,
+      # da es in der Sandbox kein SDK gibt. Ohne Testquellen läuft der Task
+      # einfach durch (bestätigt 2026-11-09, wahlscheiben-telefon).
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+      # Verteilt wird der optimierte Release-Build (R8), ~30x kleiner als Debug.
+      - name: Build release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Rename APK with commit hash
+        id: apk
+        run: |
+          mkdir -p dist
+          src="app/build/outputs/apk/release/app-release.apk"
+          out="dist/app-${{ steps.vars.outputs.sha_short }}.apk"
+          cp "$src" "$out"
+          echo "path=$out" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$out")" >> "$GITHUB_OUTPUT"
+
+      - name: Create release with APK asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ steps.vars.outputs.sha_short }}
+          name: "Build ${{ steps.vars.outputs.sha_short }}"
+          body: |
+            Automatisch gebaute, optimierte APK (Release-Build mit R8, signiert mit dem festen Test-Schlüssel) für Commit ${{ github.sha }} (Branch `${{ github.ref_name }}`).
+
+            Datei: `${{ steps.apk.outputs.name }}`
+          files: ${{ steps.apk.outputs.path }}

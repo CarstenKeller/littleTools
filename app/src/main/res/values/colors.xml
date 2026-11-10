@@ -1,0 +1,4 @@
+<resources>
+    <!-- Launcher-Icon-Hintergrundfarbe - anpassen -->
+    <color name="ic_launcher_background">#FF1E3A5F</color>
+</resources>
