@@ -407,23 +407,27 @@ def tile_flashlight():
 
 
 def tile_rangefinder():
-    defs = """<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fa8dc"/><stop offset="1" stop-color="#d7ecff"/></linearGradient>
-<linearGradient id="field" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cb342"/><stop offset="1" stop-color="#33691e"/></linearGradient>
-<radialGradient id="vig" cx=".5" cy=".5" r=".5"><stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
-<clipPath id="scope"><circle cx="256" cy="220" r="180"/></clipPath>"""
-    view = """<g clip-path="url(#scope)">
-<rect x="0" y="0" width="512" height="512" fill="url(#sky)"/>
-<path d="M0 230 Q 120 180 250 220 T 512 210 V 512 H0 Z" fill="#8bb85a"/>
-<path d="M0 270 Q 200 240 512 280 V 512 H0 Z" fill="url(#field)"/>
-<rect x="300" y="176" width="10" height="70" fill="#5d4037"/><circle cx="305" cy="170" r="34" fill="#2e7d32"/><circle cx="292" cy="180" r="22" fill="#388e3c"/>
-<circle cx="256" cy="220" r="180" fill="url(#vig)"/>
-<g fill="none" stroke="#e53935" stroke-width="4">
-<path d="M 226 194 h -16 v 16 M 286 194 h 16 v 16 M 226 246 h -16 v -16 M 286 246 h 16 v -16"/></g>
-<circle cx="256" cy="220" r="3" fill="#e53935"/>
-<text x="256" y="300" font-family="DejaVu Sans Mono, monospace" font-size="38" font-weight="bold" fill="#ff5252" text-anchor="middle">42.5 m</text>
+    """Blick durch einen Entfernungsmesser auf ein Foto des Nutzers (eigener Garten, freigegeben 2026-11-11).
+    Foto ohne Metadaten unter art/photos/. Der Messwert in der Anzeige ist nur Dekoration."""
+    import base64, os
+    photo = os.path.join(os.path.dirname(__file__), "photos", "rangefinder_garden.jpg")
+    data = base64.b64encode(open(photo, "rb").read()).decode()
+    cy = 220; r = 180
+    defs = f"""<radialGradient id="vig" cx=".5" cy=".5" r=".5"><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
+<clipPath id="scope"><circle cx="256" cy="{cy}" r="{r}"/></clipPath>"""
+    # Foto so legen, dass die Bank (Bildmitte des Ausschnitts) im Zentrum der Optik liegt
+    size = 2 * r * 1.15
+    view = f"""<g clip-path="url(#scope)">
+<image href="data:image/jpeg;base64,{data}" x="{256 - size / 2}" y="{cy - size / 2}" width="{size}" height="{size}" preserveAspectRatio="xMidYMid slice"/>
+<circle cx="256" cy="{cy}" r="{r}" fill="url(#vig)"/>
+<g fill="none" stroke="#ff3d3d" stroke-width="4">
+<path d="M 226 {cy - 26} h -16 v 16 M 286 {cy - 26} h 16 v 16 M 226 {cy + 26} h -16 v -16 M 286 {cy + 26} h 16 v -16"/></g>
+<circle cx="256" cy="{cy}" r="3" fill="#ff3d3d"/>
+<rect x="176" y="{cy + 52}" width="160" height="46" rx="8" fill="#000" fill-opacity=".45"/>
+<text x="256" y="{cy + 87}" font-family="DejaVu Sans Mono, monospace" font-size="36" font-weight="bold" fill="#ff5252" text-anchor="middle">14.8 m</text>
 </g>
-<circle cx="256" cy="220" r="184" fill="none" stroke="#0b0c0d" stroke-width="16"/>
-<circle cx="256" cy="220" r="194" fill="none" stroke="#3b4248" stroke-width="6"/>"""
+<circle cx="256" cy="{cy}" r="{r + 4}" fill="none" stroke="#0b0c0d" stroke-width="16"/>
+<circle cx="256" cy="{cy}" r="{r + 14}" fill="none" stroke="#3b4248" stroke-width="6"/>"""
     return tile(view, defs)
 
 
