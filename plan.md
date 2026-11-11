@@ -51,6 +51,12 @@ Positionsangabe mit Höhenmesser."
 - [x] Position + Höhenmesser
 - [x] Entfernungsmesser (Neigung, mit Kamerabild)
 
+## Phase 1b – Optik (2026-11-11)
+- [x] Realitätsnahe Kachelbilder (A-02), Raster füllt Bildschirm / Spalten einstellbar (A-03), Einstellungen (A-04)
+- [x] Realitätsnahe Werkzeuge: Kompass (Messing, drehende Rose), Wasserwaage (Alu, Libelle), Dosenlibelle,
+      Zollstock-Optik, Taschenlampe (Bild zum Antippen), Entfernungsmesser-Anzeige, analoger Höhenmesser
+- Grafikquelle: `art/shapes.py` → `python3 art/render.py` (braucht Node-Playwright + Pillow)
+
 ## Phase 2 – Ideen
 - [ ] Kompass: geografisch Nord (Missweisung über `GeomagneticField`), Hochkant-Modus
 - [ ] Taschenlampe: Helligkeit (ab Android 13), Blinken/SOS

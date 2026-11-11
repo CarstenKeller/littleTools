@@ -1,12 +1,18 @@
 package io.github.carstenkeller.littletools.tools
 
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.res.painterResource
+import io.github.carstenkeller.littletools.ui.art.ArtGeometry as G
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Tune
@@ -20,11 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,7 +39,6 @@ import io.github.carstenkeller.littletools.ui.components.IconActionButton
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.hypot
-import kotlin.math.min
 
 /** Grün, wenn innerhalb dieser Abweichung (Grad). */
 private const val LEVEL_OK_DEG = 0.5
@@ -78,26 +79,29 @@ fun EdgeLevelScreen(onBack: () -> Unit) {
                 val ok = onEdge && abs(angle) <= LEVEL_OK_DEG
                 // Text so drehen, dass er bei aufgestelltem Gerät aufrecht steht.
                 val textRotation = if (ToolMath.edgeUpSide(v[0]) > 0) 90f else -90f
-                val tubeColor = MaterialTheme.colorScheme.outline
                 val bubble = levelColor(ok)
                 Box(modifier.padding(16.dp)) {
-                    // Röhre entlang der Längsachse (= Bildschirmhöhe), Blase wandert zur höheren Seite.
-                    Canvas(Modifier.fillMaxHeight().width(72.dp).align(Alignment.CenterStart)) {
-                        val w = size.width
-                        val h = size.height
-                        drawRoundRect(tubeColor, size = Size(w, h), cornerRadius = CornerRadius(w / 2), style = Stroke(3.dp.toPx()))
-                        val maxDeg = 10.0
-                        val r = w * 0.38f
-                        val travel = h / 2 - w / 2
-                        val pos = (angle.coerceIn(-maxDeg, maxDeg) / maxDeg).toFloat() * travel
-                        // Oberkante höher (angle > 0) -> Blase nach oben (Bildschirm-y kleiner).
-                        drawCircle(bubble, radius = r, center = Offset(w / 2, h / 2 - pos))
-                        val mark = r + 4.dp.toPx()
-                        drawLine(tubeColor, Offset(0f, h / 2 - mark), Offset(w, h / 2 - mark), 2.dp.toPx())
-                        drawLine(tubeColor, Offset(0f, h / 2 + mark), Offset(w, h / 2 + mark), 2.dp.toPx())
+                    // A-02: realitätsnahe Wasserwaage; die Blase wandert zur höheren Seite.
+                    BoxWithConstraints(
+                        Modifier.fillMaxHeight().aspectRatio(G.EDGE_W / G.EDGE_H).align(Alignment.CenterStart),
+                    ) {
+                        val u = maxHeight / G.EDGE_H // dp je Bild-Einheit
+                        val visible = G.EDGE_VIAL_W * 0.9f
+                        val img = visible / G.BUBBLE_FILL
+                        val mid = (G.EDGE_VIAL_TOP + G.EDGE_VIAL_BOTTOM) / 2
+                        val travel = (G.EDGE_VIAL_BOTTOM - G.EDGE_VIAL_TOP) / 2 - visible / 2
+                        val maxDeg = 5.0
+                        // Oberkante höher (angle > 0) -> Blase nach oben.
+                        val cy = mid - (angle.coerceIn(-maxDeg, maxDeg) / maxDeg).toFloat() * travel
+                        Image(painterResource(R.drawable.edge_level_bar), null, Modifier.fillMaxSize())
+                        Image(
+                            painterResource(R.drawable.bubble), null,
+                            Modifier.offset(u * (G.EDGE_VIAL_X - img / 2), u * (cy - img / 2)).size(u * img),
+                        )
+                        Image(painterResource(R.drawable.edge_level_glass), null, Modifier.fillMaxSize())
                     }
                     Column(
-                        Modifier.align(Alignment.Center).padding(start = 72.dp).rotate(textRotation),
+                        Modifier.align(Alignment.Center).padding(start = 140.dp).rotate(textRotation),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         if (onEdge) {
@@ -145,23 +149,27 @@ fun FlatLevelScreen(onBack: () -> Unit) {
                 val x = rx - offX
                 val y = ry - offY
                 val ok = hypot(x, y) <= LEVEL_OK_DEG
-                val ringColor = MaterialTheme.colorScheme.outline
                 val bubble = levelColor(ok)
                 Column(modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Canvas(Modifier.fillMaxWidth().weight(1f)) {
-                        val c = Offset(size.width / 2, size.height / 2)
-                        val radius = min(size.width, size.height) / 2 * 0.9f
-                        drawCircle(ringColor, radius, c, style = Stroke(3.dp.toPx()))
-                        drawCircle(ringColor, radius / 3, c, style = Stroke(1.dp.toPx()))
-                        drawLine(ringColor, Offset(c.x - radius, c.y), Offset(c.x + radius, c.y), 1.dp.toPx())
-                        drawLine(ringColor, Offset(c.x, c.y - radius), Offset(c.x, c.y + radius), 1.dp.toPx())
-                        val maxDeg = 15.0
-                        val br = radius * 0.15f
-                        var dx = (x / maxDeg).toFloat() * (radius - br)
-                        var dy = (-y / maxDeg).toFloat() * (radius - br) // Oberkante höher -> Blase nach oben
-                        val d = hypot(dx, dy)
-                        if (d > radius - br) { dx *= (radius - br) / d; dy *= (radius - br) / d }
-                        drawCircle(bubble, br, Offset(c.x + dx, c.y + dy))
+                    Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                        // A-02: realitätsnahe Dosenlibelle aus Bildebenen.
+                        BoxWithConstraints(Modifier.aspectRatio(1f, matchHeightConstraintsFirst = true)) {
+                            val u = maxWidth / G.FLAT_SIZE
+                            val c = G.FLAT_SIZE / 2
+                            val maxR = G.FLAT_VIAL_R - G.FLAT_BUBBLE_R
+                            val maxDeg = 10.0
+                            var dx = (x / maxDeg).toFloat() * maxR
+                            var dy = (-y / maxDeg).toFloat() * maxR // Oberkante höher -> Blase nach oben
+                            val d = hypot(dx, dy)
+                            if (d > maxR) { dx *= maxR / d; dy *= maxR / d }
+                            val img = 2 * G.FLAT_BUBBLE_R / G.BUBBLE_FILL
+                            Image(painterResource(R.drawable.flat_level_base), null, Modifier.fillMaxSize())
+                            Image(
+                                painterResource(R.drawable.bubble), null,
+                                Modifier.offset(u * (c + dx - img / 2), u * (c + dy - img / 2)).size(u * img),
+                            )
+                            Image(painterResource(R.drawable.flat_level_glass), null, Modifier.fillMaxSize())
+                        }
                     }
                     Text(
                         "↔ ${fmtDeg(abs(x))}    ↕ ${fmtDeg(abs(y))}",

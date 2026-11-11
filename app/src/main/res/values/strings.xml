@@ -61,4 +61,15 @@
     <string name="barometer_values">Druck %1$s hPa, Bezug %2$s hPa</string>
     <string name="barometer_hint">Wetterabhängig. Gut für Höhenunterschiede; für die absolute Höhe mit der GPS-Höhe abgleichen.</string>
     <string name="barometer_from_gps">Mit GPS-Höhe abgleichen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="grid_title">Raster der Startseite</string>
+    <string name="grid_hint">Automatisch: alle Werkzeuge passen ohne Scrollen auf den Bildschirm, so groß wie möglich.</string>
+    <string name="grid_auto">Automatisch</string>
+    <plurals name="grid_columns">
+        <item quantity="one">%d Spalte</item>
+        <item quantity="other">%d Spalten</item>
+    </plurals>
+    <string name="altimeter_source_baro">%1$s m ü. NN (Luftdruck)</string>
+    <string name="altimeter_source_gps">%1$s m (GPS)</string>
+    <string name="flashlight_tap_hint">Zum Ein- und Ausschalten auf die Lampe tippen.</string>
 </resources>

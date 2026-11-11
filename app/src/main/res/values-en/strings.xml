@@ -61,4 +61,15 @@
     <string name="barometer_values">Pressure %1$s hPa, reference %2$s hPa</string>
     <string name="barometer_hint">Weather dependent. Good for height differences; align with GPS altitude for absolute height.</string>
     <string name="barometer_from_gps">Align with GPS altitude</string>
+    <string name="settings">Settings</string>
+    <string name="grid_title">Home screen grid</string>
+    <string name="grid_hint">Automatic: all tools fit on the screen without scrolling, as large as possible.</string>
+    <string name="grid_auto">Automatic</string>
+    <plurals name="grid_columns">
+        <item quantity="one">%d column</item>
+        <item quantity="other">%d columns</item>
+    </plurals>
+    <string name="altimeter_source_baro">%1$s m above sea level (air pressure)</string>
+    <string name="altimeter_source_gps">%1$s m (GPS)</string>
+    <string name="flashlight_tap_hint">Tap the flashlight to switch it on and off.</string>
 </resources>

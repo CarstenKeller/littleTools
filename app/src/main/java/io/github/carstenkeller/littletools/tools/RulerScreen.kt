@@ -23,7 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.drawText
@@ -52,11 +55,17 @@ fun RulerScreen(onBack: () -> Unit) {
         IconActionButton(Icons.Filled.Tune, stringResource(R.string.ruler_calibrate), { calibrating = !calibrating })
     }) { modifier ->
         Box(modifier) {
-            val lineColor = MaterialTheme.colorScheme.onBackground
-            val accent = MaterialTheme.colorScheme.primary
+            // A-02: Optik eines gelben Zollstocks (feste Farben, unabhängig von Hell/Dunkel).
+            val lineColor = Color(0xFF1A1A1A)
+            val ruleBrush = Brush.horizontalGradient(
+                0f to Color(0xFFA77D05), 0.06f to Color(0xFFF7D43A), 0.2f to Color(0xFFFFF2A8),
+                0.4f to Color(0xFFF2CB2C), 0.92f to Color(0xFFE9BB12), 1f to Color(0xFF8A6604),
+            )
+            val accent = Color(0xFFD32F2F) // Kalibriermarke, kontrastreich auf Gelb
             val measurer = rememberTextMeasurer()
-            val labelStyle = MaterialTheme.typography.labelMedium.copy(color = lineColor)
+            val labelStyle = MaterialTheme.typography.titleMedium.copy(color = lineColor, fontWeight = FontWeight.Bold)
             Canvas(Modifier.fillMaxHeight().width(120.dp)) {
+                drawRect(ruleBrush)
                 val totalMm = (size.height / pxPerMm).toInt()
                 for (mm in 0..totalMm) {
                     val y = mm * pxPerMm

@@ -16,6 +16,11 @@ class Prefs(context: Context) {
             .getOrDefault(ThemeMode.SYSTEM)
         set(v) = sp.edit().putString("theme_mode", v.name).apply()
 
+    /** Spalten im Startraster; 0 = automatisch (alle Kacheln ohne Scrollen, möglichst groß). */
+    var gridColumns: Int
+        get() = sp.getInt("grid_columns", 0)
+        set(v) = sp.edit().putInt("grid_columns", v).apply()
+
     fun getFloat(key: String, default: Float): Float = sp.getFloat(key, default)
     fun putFloat(key: String, value: Float) = sp.edit().putFloat(key, value).apply()
 }

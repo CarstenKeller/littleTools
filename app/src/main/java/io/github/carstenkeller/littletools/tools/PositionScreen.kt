@@ -15,7 +15,12 @@ import android.os.Bundle
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +45,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -130,6 +137,20 @@ private fun PositionContent(modifier: Modifier) {
         modifier.verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        // A-02: analoger Höhenmesser. Quelle: Luftdruck (falls vorhanden), sonst GPS.
+        val baroAlt = pressure.values?.let { ToolMath.pressureToAltitude(p0, it[0].toDouble()) }
+        val gpsAlt = msl ?: loc?.takeIf { it.hasAltitude() }?.altitude
+        val shownAlt = baroAlt ?: gpsAlt
+        Altimeter(shownAlt, Modifier.fillMaxWidth(0.8f).align(Alignment.CenterHorizontally))
+        Text(
+            when {
+                shownAlt == null -> stringResource(R.string.position_searching)
+                baroAlt != null -> stringResource(R.string.altimeter_source_baro, f("%.0f", shownAlt))
+                else -> stringResource(R.string.altimeter_source_gps, f("%.0f", shownAlt))
+            },
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
         Card {
             Column(Modifier.padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -193,5 +214,21 @@ private fun PositionContent(modifier: Modifier) {
                 }
             }
         }
+    }
+}
+
+/** Analoger Höhenmesser: langer Zeiger 1000 m je Umdrehung, kurzer Zeiger 10 000 m je Umdrehung. */
+@Composable
+private fun Altimeter(altitudeM: Double?, modifier: Modifier) {
+    val a = altitudeM ?: 0.0
+    val long = (((a % 1000.0) + 1000.0) % 1000.0 / 1000.0 * 360.0).toFloat()
+    val short = (((a % 10000.0) + 10000.0) % 10000.0 / 10000.0 * 360.0).toFloat()
+    Box(modifier.aspectRatio(1f)) {
+        Image(painterResource(R.drawable.altimeter_dial), null, Modifier.fillMaxSize())
+        if (altitudeM != null) {
+            Image(painterResource(R.drawable.needle_short), null, Modifier.fillMaxSize().rotate(short))
+            Image(painterResource(R.drawable.needle_long), null, Modifier.fillMaxSize().rotate(long))
+        }
+        Image(painterResource(R.drawable.glass_round), null, Modifier.fillMaxSize())
     }
 }

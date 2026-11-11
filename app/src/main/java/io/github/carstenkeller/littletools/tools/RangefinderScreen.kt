@@ -31,7 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +49,7 @@ import io.github.carstenkeller.littletools.settings.Prefs
 import java.util.Locale
 
 private const val KEY_HEIGHT = "rangefinder_height"
+private val RED = Color(0xFFFF3D3D)
 
 /**
  * Entfernungsmesser per Neigungswinkel: Gerät in Haltehöhe h, Fadenkreuz auf den Fußpunkt
@@ -79,22 +83,28 @@ fun RangefinderScreen(onBack: () -> Unit) {
                     }
                 }
             }
-            // Fadenkreuz in der Bildmitte (Bildmitte ≈ optische Achse der Kamera; Annahme, s. plan.md)
-            val cross = if (cameraGranted) Color.White else MaterialTheme.colorScheme.onBackground
+            // A-02: Anzeige wie in einem Laser-Entfernungsmesser: rote Eckklammern, Punkt in der Bildmitte
+            // (Bildmitte ≈ optische Achse der Kamera; Annahme, s. plan.md), Abdunklung am Rand.
             Canvas(Modifier.fillMaxSize()) {
                 val c = Offset(size.width / 2, size.height / 2)
-                val l = 28.dp.toPx()
-                val w = 2.dp.toPx()
-                drawLine(Color.Black, Offset(c.x - l, c.y), Offset(c.x + l, c.y), w * 2.5f)
-                drawLine(Color.Black, Offset(c.x, c.y - l), Offset(c.x, c.y + l), w * 2.5f)
-                drawLine(cross, Offset(c.x - l, c.y), Offset(c.x + l, c.y), w)
-                drawLine(cross, Offset(c.x, c.y - l), Offset(c.x, c.y + l), w)
-                drawCircle(cross, l * 0.6f, c, style = Stroke(w))
+                drawRect(
+                    Brush.radialGradient(
+                        0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.75f),
+                        center = c, radius = size.maxDimension * 0.6f,
+                    ),
+                )
+                val a = 34.dp.toPx(); val l = 16.dp.toPx(); val w = 3.dp.toPx()
+                for (sx in listOf(-1f, 1f)) for (sy in listOf(-1f, 1f)) {
+                    val corner = Offset(c.x + sx * a, c.y + sy * a)
+                    drawLine(RED, corner, Offset(corner.x - sx * l, corner.y), w)
+                    drawLine(RED, corner, Offset(corner.x, corner.y - sy * l), w)
+                }
+                drawCircle(RED, 3.dp.toPx(), c)
             }
             val v = reading.values
             Column(
                 Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.88f))
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -104,10 +114,13 @@ fun RangefinderScreen(onBack: () -> Unit) {
                     else -> {
                         val angle = ToolMath.cameraAngleFromVertical(v[0], v[1], v[2])
                         val d = ToolMath.distanceOnGround(height.toDouble(), angle)
+                        // Digitalanzeige im Stil eines Messgeräts
                         Text(
                             if (d == null) stringResource(R.string.rangefinder_too_flat)
                             else String.format(Locale.getDefault(), "%.1f m", d),
-                            style = MaterialTheme.typography.displayMedium,
+                            style = MaterialTheme.typography.displayMedium.copy(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold),
+                            color = Color(0xFFFF5252),
+                            modifier = Modifier.background(Color(0xFF101214), RoundedCornerShape(10.dp)).padding(horizontal = 16.dp, vertical = 4.dp),
                         )
                         Text(String.format(Locale.getDefault(), "%.1f°", 90.0 - angle) + " " + stringResource(R.string.rangefinder_below_horizon))
                     }

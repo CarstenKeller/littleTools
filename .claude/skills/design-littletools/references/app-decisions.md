@@ -27,6 +27,27 @@ Widerspruch gilt in dieser App der Eintrag hier.
 - **Quelle:** Auswahl des Nutzers per Rückfrage bei `/i`, 2026-11-10
 - **Status:** bestätigt (2026-11-10)
 
+### A-02: Realitätsnahe Grafiken für Kacheln und Werkzeuge
+- **Entscheidung:** Kacheln und Werkzeug-Ansichten zeigen realitätsnahe Darstellungen der echten Geräte (Messingkompass, Alu-Wasserwaage mit Libelle, Dosenlibelle, gelber Zollstock, Taschenlampe, Entfernungsmesser-Anzeige, analoger Höhenmesser) statt flacher Icons.
+- **Begründung:** "Kacheln mit einem schicken idealerweise fotorealischen Bild"; "Die Grafiken für die Funktionen hätte ich auch gerne realitätsnah dargestellt."
+- **Umsetzung:** Selbst gezeichnet als SVG mit Verläufen/Glanz/Schatten (`art/shapes.py`), per `art/render.py` zu WebP gerendert (`drawable-nodpi`). Bewegliche Teile (Rose, Blasen, Zeiger) sind eigene Bildebenen; ihre Lage steht in `ArtGeometry.kt` und `GEOMETRY` in `shapes.py`. Gerätefarben sind bewusst fest (nicht `colorScheme`). Beschriftungen in Bildern nur sprachneutral oder je Sprache (`drawable-en-nodpi`, z. B. Kompassrose O/E, D-06). Keine fremden Fotos (Lizenz) – echte Fotorealistik ist damit **nicht** erreicht, sondern ein realitätsnaher Illustrationsstil.
+- **Abweichung von:** – (ergänzt D-03; Gerätegrafiken nutzen keine dynamischen Farben)
+- **Quelle:** wörtliche Vorgabe, 2026-11-11; Umsetzung als Illustration ist Interpretation von Claude
+- **Status:** bestätigt (2026-11-11), Umsetzung abgeleitet
+
+### A-03: Startraster füllt den Bildschirm, Spaltenzahl einstellbar
+- **Entscheidung:** Standard "Automatisch": alle Kacheln ohne Scrollen sichtbar und möglichst groß; Kacheln dürfen dafür zwischen 0,7 und 1,4 Seitenverhältnis haben (Bild wird beschnitten). In den Einstellungen wählbar: Automatisch oder feste 1–4 Spalten (quadratische Kacheln, ggf. Scrollen). Name des Tools als weiße Schrift auf dunklem Verlauf unten auf der Kachel.
+- **Begründung:** "Standardmäßig versucht die app die Kacheln optimal in einem Griff auf dem Bildschirm zu verteilen. In den Einstellungen kann ich die Gridgröße festlegen."
+- **Abweichung von:** ergänzt A-01 (Kachel = Bild + Name statt Icon + Name)
+- **Quelle:** wörtliche Vorgabe, 2026-11-11; "Gridgröße" als Spaltenzahl verstanden und Seitenverhältnis-Spielraum = Interpretation von Claude
+- **Status:** bestätigt (2026-11-11), Details abgeleitet
+
+### A-04: Einstellungen als eigener Bildschirm
+- **Entscheidung:** Zahnrad-Icon oben rechts auf der Startseite öffnet "Einstellungen" mit Darstellung (Hell/Dunkel/System) und Raster.
+- **Abweichung von:** D-07, Umsetzungsdetail (dort: Icon öffnet Dialog nur für die Darstellung) – nötig, weil es jetzt mehrere Einstellungen gibt.
+- **Quelle:** abgeleitet aus A-03, 2026-11-11
+- **Status:** abgeleitet
+
 ## Offene Designfragen dieser App
 
 - [ ] …
