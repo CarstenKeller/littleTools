@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -108,7 +110,9 @@ private fun ToolTile(tool: Tool, width: Dp, height: Dp, onClick: () -> Unit) {
                 Text(
                     stringResource(tool.title),
                     color = Color.White,
-                    style = if (minOf(width, height) < 120.dp) MaterialTheme.typography.labelLarge else MaterialTheme.typography.titleMedium,
+                    // Lange Wörter (Entfernungsmesser) an Silbengrenzen trennen statt mitten im Wort.
+                    style = (if (minOf(width, height) < 120.dp) MaterialTheme.typography.labelLarge else MaterialTheme.typography.titleMedium)
+                        .copy(hyphens = Hyphens.Auto, lineBreak = LineBreak.Paragraph),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

@@ -72,4 +72,5 @@
     <string name="altimeter_source_baro">%1$s m above sea level (air pressure)</string>
     <string name="altimeter_source_gps">%1$s m (GPS)</string>
     <string name="flashlight_tap_hint">Tap the flashlight to switch it on and off.</string>
+    <string name="version">Version %1$s</string>
 </resources>

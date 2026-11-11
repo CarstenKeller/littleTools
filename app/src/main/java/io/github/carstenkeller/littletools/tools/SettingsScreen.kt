@@ -19,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -68,6 +70,13 @@ fun SettingsScreen(
                     RadioRow(pluralStringResource(R.plurals.grid_columns, c, c), gridColumns == c) { onGridColumns(c) }
                 }
             }
+            HorizontalDivider(Modifier.padding(vertical = 16.dp))
+            val context = LocalContext.current
+            val version = remember {
+                runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull() ?: "?"
+            }
+            Text(stringResource(R.string.version, version), style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

@@ -14,8 +14,12 @@ android {
         applicationId = "io.github.carstenkeller.littletools"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        // Jeder CI-Lauf bekommt eine eigene, steigende Versionsnummer und den Commit im Namen,
+        // damit Updates sicher erkannt werden und in den Einstellungen sichtbar ist, was installiert ist.
+        val run = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
+        val sha = System.getenv("GITHUB_SHA")?.take(7) ?: "local"
+        versionCode = run
+        versionName = "0.2.$run ($sha)"
     }
 
     // Fester, ins Repo eingecheckter Debug-Keystore statt des von AGP pro
